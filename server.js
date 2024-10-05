@@ -16,7 +16,7 @@ function streamCurrentVideo(req, res) {
     '--playlist-end', currentVideoIndex.toString(),
     '-o', '-',        // Output video to stdout (for streaming)
     '--no-playlist',  // Ensure we download only the current video
-    '-f', 'best',  // Fetch best available format
+    '--no-part',      // Turn off fragment files
     playlistUrl
   ]);
 
