@@ -17,9 +17,11 @@ function streamCurrentVideo(req, res) {
 
   // Path to yt-dlp binary (ensure that it's executable)
   const ytDlpPath = path.resolve('./bin/yt-dlp');
+  const cookiesFilePath = path.resolve('./cookies.txt'); // Path to your cookies file
 
   // Spawn yt-dlp process to fetch the current video from the playlist
   const process = spawn(ytDlpPath, [
+    '--cookies', cookiesFilePath,
     '--playlist-start', currentVideoIndex.toString(),
     '--playlist-end', currentVideoIndex.toString(),
     '-o', '-',  // Output the video directly to stdout
