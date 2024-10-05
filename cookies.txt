@@ -16,4 +16,5 @@
 #HttpOnly_.youtube.com	TRUE	/	TRUE	0	SSID	AEEITTvbSQJ5Pjb_Q
 .youtube.com	TRUE	/	FALSE	0	ST-xuwub9	session_logininfo=AFmmF2swRQIgA-UB-ZQvyvYJnXHD9PUzQ_fTI2hobJYo3Hs51e6L2NoCIQDRgjJaRJMynSCQDbOHTnkcWbS5EmyAMGrtcRd6Ri20Kg%3AQUQ3MjNmeHJreEIyUHVwSUhOYk5kRWZDTGNjaTBCRTV1U3BzRE5hdDF4QlJZWU1mLThheUdSY0htUHBwNWRGU2labUFyMEx5cDVWQU5qdEtMVDZjZjNjV0xJTVFhVHZhd1RXUFNHSmtWYnRWeGRNYmE1Y0VVbzdEQmVnd3ZHUnJlcmFQemVXSEZBVl9FN2t4MC1TRndnT25ZRnVUVzRlSGVB
 .youtube.com	TRUE	/	FALSE	0	wide	0
-.youtube.com	TRUE	/	FALSE	0	YTV_CLC	locsrc=1&locs=2&tz=Asia%2FDhaka
+.youtube.com
+	TRUE	/	FALSE	0	YTV_CLC	locsrc=1&locs=2&tz=Asia%2FDhaka
