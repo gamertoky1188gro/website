@@ -7,7 +7,7 @@ function playNextVideo() {
     player.style.display = 'none';
     
     // Set the video source to stream from the server
-    player.src = `http://localhost:3000/stream`;
+    player.src = `https://website-eov9.onrender.com/stream`;
   
     // Add event listeners to handle the video loading and errors
     player.addEventListener('canplay', () => {

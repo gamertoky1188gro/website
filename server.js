@@ -33,7 +33,6 @@ function streamCurrentVideo(req, res) {
     '--playlist-start', currentVideoIndex.toString(),
     '--playlist-end', currentVideoIndex.toString(),
     '-o', '-',  // Output the video directly to stdout
-    '--no-playlist',  // Fetch only one video, not the entire playlist
     '--no-part',  // Don't download in parts, stream directly
     playlistUrl
   ];
