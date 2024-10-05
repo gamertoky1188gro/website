@@ -1,30 +1,34 @@
 const express = require('express');
 const { spawn } = require('child_process');
+const path = require('path');
 const app = express();
+
+// Set the static folder for serving public files (e.g., HTML, CSS, etc.)
 app.use(express.static('public'));
 
+// YouTube playlist URL and settings
 const playlistUrl = 'https://www.youtube.com/watch?v=WyH9XqNvJ_o&list=PLGcc2ezTrRYw9XPQ9SSMyX9ujLnTloEia';
-const totalVideosInPlaylist = 10; // Manually set or use YouTube API to get dynamically
+const totalVideosInPlaylist = 10; // Manually set, or use the YouTube API to get this dynamically
 let currentVideoIndex = 1; // Start at the first video (YouTube index starts at 1)
 
+// Function to stream the current video
 function streamCurrentVideo(req, res) {
   console.log(`Streaming video ${currentVideoIndex} from playlist`);
 
-  // Spawn yt-dlp process to fetch the current video
-  const process = spawn('./bin/yt-dlp', [
+  // Path to yt-dlp binary (ensure that it's executable)
+  const ytDlpPath = path.resolve('./bin/yt-dlp');
+
+  // Spawn yt-dlp process to fetch the current video from the playlist
+  const process = spawn(ytDlpPath, [
     '--playlist-start', currentVideoIndex.toString(),
     '--playlist-end', currentVideoIndex.toString(),
-    '-o', '-',
-    '--no-playlist',
-    '--no-part',
+    '-o', '-',  // Output the video directly to stdout
+    '--no-playlist',  // Fetch only one video, not the entire playlist
+    '--no-part',  // Don't download in parts, stream directly
     playlistUrl
   ]);
 
   let headersSent = false;
-
-  app.get('/', (req, res) => {
-    res.send('Welcome to the streaming service!');
-  });
 
   // Set response headers when the first chunk of video data is sent
   process.stdout.on('data', (data) => {
@@ -32,24 +36,24 @@ function streamCurrentVideo(req, res) {
       res.setHeader('Content-Type', 'video/mp4');
       headersSent = true;
     }
-    res.write(data);  // Stream video data to client
+    res.write(data);  // Stream video data to the client
   });
 
-  // Log stderr from yt-dlp process (for errors/debugging)
+  // Log errors from the yt-dlp process (stderr)
   process.stderr.on('data', (data) => {
     console.error(`yt-dlp stderr: ${data}`);
   });
 
-  // Handle process close event
+  // Handle yt-dlp process close event
   process.on('close', (code) => {
     console.log(`yt-dlp process closed with code ${code}`);
     if (code === 0) {
       console.log(`Successfully streamed video ${currentVideoIndex}`);
-      currentVideoIndex++;
+      currentVideoIndex++;  // Move to the next video
 
-      // Reset to the first video if we've reached the end of the playlist
+      // If we have streamed all the videos, loop back to the first one
       if (currentVideoIndex > totalVideosInPlaylist) {
-        currentVideoIndex = 1;  // Loop back to the first video
+        currentVideoIndex = 1;  // Reset to the first video
       }
     } else {
       console.error('Error: yt-dlp exited with non-zero code');
@@ -68,7 +72,7 @@ function streamCurrentVideo(req, res) {
     }
   });
 
-  // Handle client disconnect (in case the client stops before the process finishes)
+  // Handle client disconnect (if the client disconnects before the stream finishes)
   req.on('close', () => {
     if (process && !process.killed) {
       console.log('Client disconnected, killing yt-dlp process.');
@@ -77,10 +81,17 @@ function streamCurrentVideo(req, res) {
   });
 }
 
+// Route to handle video streaming
 app.get('/stream', (req, res) => {
   streamCurrentVideo(req, res);
 });
 
+// Root route for basic message
+app.get('/', (req, res) => {
+  res.send('Welcome to the streaming service!');
+});
+
+// Start the server on port 3000
 app.listen(3000, () => {
   console.log('Server running on port 3000');
 });
