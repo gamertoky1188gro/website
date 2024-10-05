@@ -11,12 +11,12 @@ function streamCurrentVideo(req, res) {
   console.log(`Streaming video ${currentVideoIndex} from playlist`);
 
   // Spawn yt-dlp process to fetch the current video
-  const process = spawn('yt-dlp', [
+  const process = spawn('./bin/yt-dlp', [
     '--playlist-start', currentVideoIndex.toString(),
     '--playlist-end', currentVideoIndex.toString(),
-    '-o', '-',        // Output video to stdout (for streaming)
-    '--no-playlist',  // Ensure we download only the current video
-    '--no-part',      // Turn off fragment files
+    '-o', '-',
+    '--no-playlist',
+    '--no-part',
     playlistUrl
   ]);
 
@@ -24,7 +24,7 @@ function streamCurrentVideo(req, res) {
 
   app.get('/', (req, res) => {
     res.send('Welcome to the streaming service!');
-  });  
+  });
 
   // Set response headers when the first chunk of video data is sent
   process.stdout.on('data', (data) => {
