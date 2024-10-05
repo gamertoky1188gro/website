@@ -1,6 +1,7 @@
 const express = require('express');
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 
 // Set the static folder for serving public files (e.g., HTML, CSS, etc.)
@@ -11,24 +12,38 @@ const playlistUrl = 'https://www.youtube.com/watch?v=WyH9XqNvJ_o&list=PLGcc2ezTr
 const totalVideosInPlaylist = 10; // Manually set, or use the YouTube API to get this dynamically
 let currentVideoIndex = 1; // Start at the first video (YouTube index starts at 1)
 
+// Path to yt-dlp binary (ensure that it's executable)
+const ytDlpPath = path.resolve('./bin/yt-dlp');
+// Path to your cookies file (if necessary)
+const cookiesFilePath = path.resolve('./cookies.txt');
+
+// Ensure yt-dlp binary exists and has the correct permissions
+if (!fs.existsSync(ytDlpPath)) {
+  console.error(`yt-dlp binary not found at path: ${ytDlpPath}`);
+} else {
+  fs.chmodSync(ytDlpPath, '755'); // Ensure it's executable
+}
+
 // Function to stream the current video
 function streamCurrentVideo(req, res) {
   console.log(`Streaming video ${currentVideoIndex} from playlist`);
 
-  // Path to yt-dlp binary (ensure that it's executable)
-  const ytDlpPath = path.resolve('./bin/yt-dlp');
-  const cookiesFilePath = path.resolve('./cookies.txt'); // Path to your cookies file
-
   // Spawn yt-dlp process to fetch the current video from the playlist
-  const process = spawn(ytDlpPath, [
-    '--cookies', cookiesFilePath,
+  const ytDlpArgs = [
     '--playlist-start', currentVideoIndex.toString(),
     '--playlist-end', currentVideoIndex.toString(),
     '-o', '-',  // Output the video directly to stdout
     '--no-playlist',  // Fetch only one video, not the entire playlist
     '--no-part',  // Don't download in parts, stream directly
     playlistUrl
-  ]);
+  ];
+
+  // Optional: Add cookies file if available
+  if (fs.existsSync(cookiesFilePath)) {
+    ytDlpArgs.unshift('--cookies', cookiesFilePath);
+  }
+
+  const process = spawn(ytDlpPath, ytDlpArgs);
 
   let headersSent = false;
 
@@ -43,7 +58,7 @@ function streamCurrentVideo(req, res) {
 
   // Log errors from the yt-dlp process (stderr)
   process.stderr.on('data', (data) => {
-    console.error(`yt-dlp stderr: ${data}`);
+    console.error(`yt-dlp stderr: ${data.toString()}`);
   });
 
   // Handle yt-dlp process close event
@@ -68,7 +83,7 @@ function streamCurrentVideo(req, res) {
 
   // Handle process error event
   process.on('error', (error) => {
-    console.error('Error spawning yt-dlp process:', error);
+    console.error('Error spawning yt-dlp process:', error.message, error.stack);
     if (!headersSent) {
       res.status(500).send('Error starting yt-dlp process');
     }
@@ -96,4 +111,11 @@ app.get('/', (req, res) => {
 // Start the server on port 3000
 app.listen(3000, () => {
   console.log('Server running on port 3000');
+
+  // Check if yt-dlp is executable
+  if (fs.existsSync(ytDlpPath)) {
+    console.log('yt-dlp binary found and is executable.');
+  } else {
+    console.error('yt-dlp binary not found. Please ensure it is downloaded and located at:', ytDlpPath);
+  }
 });
