@@ -15,14 +15,14 @@ function streamCurrentVideo(req, res) {
     '--playlist-start', currentVideoIndex.toString(),
     '--playlist-end', currentVideoIndex.toString(),
     '-o', '-',        // Output video to stdout (for streaming)
-    '--no-playlist',
-    '-f', 'mp4',  // Fetch best available format (more flexible than restricting to mp4)
+    '--no-playlist',  // Ensure we download only the current video
+    '-f', 'best',  // Fetch best available format
     playlistUrl
   ]);
 
   let headersSent = false;
 
-  // Set response header to indicate mp4 content only when first data is sent
+  // Set response headers when the first chunk of video data is sent
   process.stdout.on('data', (data) => {
     if (!headersSent) {
       res.setHeader('Content-Type', 'video/mp4');
@@ -53,7 +53,7 @@ function streamCurrentVideo(req, res) {
         res.status(500).send('Error streaming video');
       }
     }
-    res.end();  // End the response
+    res.end();  // End the response after the process has completed
   });
 
   // Handle process error event
@@ -61,6 +61,14 @@ function streamCurrentVideo(req, res) {
     console.error('Error spawning yt-dlp process:', error);
     if (!headersSent) {
       res.status(500).send('Error starting yt-dlp process');
+    }
+  });
+
+  // Handle client disconnect (in case the client stops before the process finishes)
+  req.on('close', () => {
+    if (process && !process.killed) {
+      console.log('Client disconnected, killing yt-dlp process.');
+      process.kill();
     }
   });
 }
