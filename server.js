@@ -22,6 +22,10 @@ function streamCurrentVideo(req, res) {
 
   let headersSent = false;
 
+  app.get('/', (req, res) => {
+    res.send('Welcome to the streaming service!');
+  });  
+
   // Set response headers when the first chunk of video data is sent
   process.stdout.on('data', (data) => {
     if (!headersSent) {
