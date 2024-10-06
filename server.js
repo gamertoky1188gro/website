@@ -7,7 +7,14 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // Set the static folder for serving public files (e.g., HTML, CSS, etc.)
 app.use(express.static('./'));
-app.use('/proxy', createProxyMiddleware({ target: 'https://website-eov9.onrender.com', changeOrigin: true }));
+app.use('/proxy', createProxyMiddleware({
+  target: 'https://website-eov9.onrender.com/',
+  changeOrigin: true,
+  onProxyReq: (proxyReq, req, res) => {
+    proxyReq.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline';");
+  }
+}));
+
 
 // YouTube playlist URL and settings
 const playlistUrl = 'https://www.youtube.com/watch?v=WyH9XqNvJ_o&list=PLGcc2ezTrRYw9XPQ9SSMyX9ujLnTloEia';
