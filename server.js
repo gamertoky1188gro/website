@@ -17,6 +17,12 @@ const ytDlpPath = path.resolve('./bin/yt-dlp');
 // Path to your cookies file (if necessary)
 const cookiesFilePath = path.resolve('./cookies.txt');
 
+app.get('/stream', (req, res) => {
+  console.log("Received request for video stream");
+  streamCurrentVideo(req, res);
+});
+
+
 // Ensure yt-dlp binary exists and has the correct permissions
 if (!fs.existsSync(ytDlpPath)) {
   console.error(`yt-dlp binary not found at path: ${ytDlpPath}`);
@@ -115,9 +121,10 @@ app.get('/', (req, res) => {
 
 // Allow iframe embedding from all sources
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "frame-ancestors *");
+  res.setHeader("X-Frame-Options", "ALLOWALL");
   next();
 });
+
 
 
 // Start the server on port 3000
