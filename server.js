@@ -8,7 +8,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 // Set the static folder for serving public files (e.g., HTML, CSS, etc.)
 app.use(express.static('./'));
 app.use('/proxy', createProxyMiddleware({
-  target: 'https://website-eov9.onrender.com/',
+  target: 'https://website-eov9.onrender.com/stream',
   changeOrigin: true,
   onProxyReq: (proxyReq, req, res) => {
     proxyReq.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline';");
