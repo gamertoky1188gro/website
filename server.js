@@ -102,9 +102,17 @@ app.get('/stream', (req, res) => {
   streamCurrentVideo(req, res);
 });
 
-// Root route for basic message
 app.get('/', (req, res) => {
-  res.send('Welcome to the streaming service!');
+  const filePath = path.join(__dirname, 'ccccc', 'index.html');
+  
+  fs.readFile(filePath, 'utf8', (error, data) => {
+    if (error) {
+      console.error('Error reading index.html:', error);
+      res.status(500).send('Server Error: Unable to load the page');
+    } else {
+      res.send(data);
+    }
+  });
 });
 
 // Start the server on port 3000
