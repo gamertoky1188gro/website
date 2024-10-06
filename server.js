@@ -115,6 +115,13 @@ app.get('/', (req, res) => {
   });
 });
 
+// Allow iframe embedding from all sources
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "frame-ancestors *");
+  next();
+});
+
+
 // Start the server on port 3000
 app.listen(3000, () => {
   console.log('Server running on port 3000');
