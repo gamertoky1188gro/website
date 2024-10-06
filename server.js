@@ -103,17 +103,21 @@ app.get('/stream', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.send(`<a href="website-eov9.onrender.com/" target="_blank">Click here to visit my site</a>`)
+  fs.readFile("./index.html", 'utf8', (error, data) => {
+    if (error) {
+      console.error('Error reading index.html:', error);
+      res.status(500).send('Server Error: Unable to load the page');
+    } else {
+      res.send(data);
+    }
+  });
 });
 
-// Allow iframe embedding from all sources
 // Allow iframe embedding from all sources
 app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", "frame-ancestors *");
-  res.removeHeader('X-Frame-Options');  // Optional: ensure X-Frame-Options is not set
   next();
 });
-
 
 
 // Start the server on port 3000
