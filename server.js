@@ -5,7 +5,7 @@ const fs = require('fs');
 const app = express();
 
 // Set the static folder for serving public files (e.g., HTML, CSS, etc.)
-app.use(express.static('public'));
+app.use(express.static('./'));
 
 // YouTube playlist URL and settings
 const playlistUrl = 'https://www.youtube.com/watch?v=WyH9XqNvJ_o&list=PLGcc2ezTrRYw9XPQ9SSMyX9ujLnTloEia';
