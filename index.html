@@ -3,20 +3,26 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Access-Control-Allow-Origin" content="*">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Consolidated CSP directive -->
-  <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self'; 
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; 
-    media-src 'self' https://cdn.discordapp.com/ blob: data:; 
-    img-src 'self' data:; 
-    style-src 'self' 'unsafe-inline'; 
-    font-src 'self';">
-  
+  <!-- Content-Security-Policy (CSP) -->
+  <meta http-equiv="Content-Security-Policy" 
+        content="
+        default-src 'self'; 
+        script-src 'self' 'unsafe-eval' https://static.cloudflareinsights.com 'nonce-abc123'; 
+        media-src 'self' https://cdn.discordapp.com/ blob: data:; 
+        img-src 'self' data:; 
+        style-src 'self' 'unsafe-inline'; 
+        font-src 'self';
+        ">
+
   <title>Nasheed Playlist Player</title>
-  <script src="script.js"></script>
+
+  <!-- External script (nonce is required for inline script to execute) -->
+  <script src="https://static.cloudflareinsights.com/beacon.min.js" nonce="abc123"></script>
+  <script src="script.js" nonce="abc123"></script>
+  
+  <!-- External style -->
   <link rel="stylesheet" href="style.css">
 </head>
 
