@@ -35,6 +35,12 @@
   <!-- Video player -->
   <video id="nasheed-player" controls autoplay></video>
 
+  <!-- Inline script with nonce -->
+  <script nonce="abc123">
+    console.log('This inline script is allowed by the CSP');
+    // You can move this inline script to an external JS file if necessary
+  </script>
+
 </body>
 
 </html>
