@@ -5,15 +5,16 @@
   <meta charset="UTF-8">
   <meta http-equiv="Access-Control-Allow-Origin" content="*">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Consolidated CSP directive -->
   <meta http-equiv="Content-Security-Policy" content="
-  default-src 'self'; 
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; 
-  media-src 'self' https://cdn.discordapp.com/ blob: data:; 
-  img-src 'self' data:; 
-  style-src 'self' 'unsafe-inline'; 
-  font-src 'self';">
-  <meta http-equiv="Content-Security-Policy" content="media-src 'self' blob: data:;">
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'nonce-MTA4LDk1LDEzLDE4NCwxMzQsMTIxLDE2LDEzNw==' blob:;">
+    default-src 'self'; 
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; 
+    media-src 'self' https://cdn.discordapp.com/ blob: data:; 
+    img-src 'self' data:; 
+    style-src 'self' 'unsafe-inline'; 
+    font-src 'self';">
+  
   <title>Nasheed Playlist Player</title>
   <script src="script.js"></script>
   <link rel="stylesheet" href="style.css">
@@ -27,7 +28,6 @@
 
   <!-- Video player -->
   <video id="nasheed-player" controls autoplay></video>
-
 
 </body>
 
