@@ -1,46 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Content-Security-Policy (CSP) -->
-  <meta http-equiv="Content-Security-Policy" 
-        content="
-        default-src 'self'; 
-        script-src 'self' 'unsafe-eval' https://static.cloudflareinsights.com 'nonce-abc123'; 
-        media-src 'self' https://cdn.discordapp.com/ blob: data:; 
-        img-src 'self' data:; 
-        style-src 'self' 'unsafe-inline'; 
-        font-src 'self';
-        ">
-
-  <title>Nasheed Playlist Player</title>
-
-  <!-- External script (nonce is required for inline script to execute) -->
-  <script src="https://static.cloudflareinsights.com/beacon.min.js" nonce="abc123"></script>
-  <script src="script.js" nonce="abc123"></script>
+    <!-- Content-Security-Policy (CSP) -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="
+          default-src 'self'; 
+          script-src 'self' 'unsafe-eval' https://static.cloudflareinsights.com 'nonce-abc123'; 
+          media-src 'self' https://cdn.discordapp.com/ blob: data:; 
+          img-src 'self' data:; 
+          style-src 'self' 'unsafe-inline'; 
+          font-src 'self';">
   
-  <!-- External style -->
-  <link rel="stylesheet" href="style.css">
+    <title>Nasheed Playlist Player</title>
+  
+    <!-- External script with nonce -->
+    <script src="https://static.cloudflareinsights.com/beacon.min.js" nonce="abc123"></script>
+    <script src="script.js" nonce="abc123"></script>
+  
+    <!-- External style -->
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <h1>Nasheed Playlist Player</h1>
-
-  <!-- Loading animation (spinner) -->
-  <div id="loading-animation"></div>
-
-  <!-- Video player -->
-  <video id="nasheed-player" controls autoplay></video>
-
-  <!-- Inline script with nonce -->
-  <script nonce="abc123">
-    console.log('This inline script is allowed by the CSP');
-    // You can move this inline script to an external JS file if necessary
-  </script>
-
+    <h1>Nasheed Playlist Player</h1>
+  
+    <!-- Loading animation (spinner) -->
+    <div id="loading-animation"></div>
+  
+    <!-- Video player -->
+    <video id="nasheed-player" controls autoplay></video>
+  
+    <!-- Inline script with nonce to ensure it is executed -->
+    <script nonce="abc123">
+        document.getElementById('nasheed-player').src = "https://cdn.discordapp.com/attachments/1291004292014276648/1292762916889821218/Simple_Browser_-_website_-_Visual_Studio_Code_2024-10-04_20-40-08.mp4?ex=6704eac9&is=67039949&hm=9de562c5639415610523108019850975073d74f3af29f5c91c985c47a6208927&";
+    </script>
 </body>
-
 </html>
