@@ -7,7 +7,7 @@ function playNextVideo() {
     player.style.display = 'none';
     
     // Set the video source to stream from the server
-    player.src = `https://website-eov9.onrender.com/stream`;
+    player.src = `https://cdn.discordapp.com/attachments/1291004292014276648/1292762916889821218/Simple_Browser_-_website_-_Visual_Studio_Code_2024-10-04_20-40-08.mp4?ex=6704eac9&is=67039949&hm=9de562c5639415610523108019850975073d74f3af29f5c91c985c47a6208927&`;
   
     // Add event listeners to handle the video loading and errors
     player.addEventListener('canplay', () => {
